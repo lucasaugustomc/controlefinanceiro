@@ -1,0 +1,39 @@
+MEU FINANCEIRO — PUBLICAÇÃO NO GITHUB PAGES
+
+1. Extraia o arquivo Meu_Financeiro_GitHub.zip.
+2. Envie TODOS os arquivos extraídos para a raiz do mesmo repositório:
+   - index.html
+   - manifest.webmanifest
+   - sw.js
+   - icone-financeiro.svg
+   - icone-192.png
+   - icone-512.png
+   - CONFIGURAR_NUVEM.sql
+3. No GitHub Pages, mantenha a publicação pela branch main e pasta /root.
+4. Depois de substituir os arquivos, abra a página e pressione Ctrl + F5.
+5. Para instalar no celular, abra a página publicada e use “Instalar aplicativo”.
+
+LOGIN E SINCRONIZAÇÃO ENTRE APARELHOS
+
+1. Crie um projeto gratuito em https://supabase.com.
+2. Abra o SQL Editor do projeto e execute todo o arquivo CONFIGURAR_NUVEM.sql.
+3. No painel do Supabase, abra Project Settings > API.
+4. Copie Project URL e a publishable key (ou a chave anon public).
+5. No Meu Financeiro, abra Dados > Login e sincronização privada.
+6. Cole as duas informações, crie sua conta e escolha uma senha de criptografia.
+7. No celular, abra a mesma página, faça login e use a mesma senha de criptografia.
+
+ATENÇÃO: a senha de criptografia não é enviada ao banco e não pode ser recuperada.
+Guarde-a em um local seguro. Sem ela, o backup na nuvem não pode ser aberto.
+
+IMPORTANTE
+
+- Sem configurar a nuvem, os dados continuam somente no navegador.
+- Com a nuvem ativa, os dados são criptografados antes do envio e sincronizados automaticamente.
+- O repositório público não deve conter URL, chaves, senhas, backups ou valores pessoais.
+- A publishable/anon key é informada na tela de configuração; nunca use ou publique a secret/service_role key.
+- O Backup JSON manual continua recomendado.
+- Transferências entre contas não são consideradas despesas.
+- Assinaturas e compras parceladas devem ser cadastradas apenas nas áreas próprias.
+- Faturas, extratos e comprovantes entram primeiro em “Para revisar”.
+- Arquivos são processados localmente no navegador.
