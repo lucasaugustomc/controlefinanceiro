@@ -832,6 +832,18 @@
     }
     .check-field { display: flex; align-items: center; gap: 8px; min-height: 42px; }
 
+    .password-field { position: relative; }
+    .password-field input { padding-right: 74px; }
+    .password-toggle {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      background: none; border: none; padding: 6px 8px; font-size: .74rem; font-weight: 800;
+      color: var(--green-700); border-radius: 6px;
+    }
+    .password-toggle:hover { background: var(--surface-soft); }
+    .cloud-link-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .cloud-link-button { background: none; border: none; padding: 2px; font-weight: 800; font-size: .82rem; color: var(--green-700); text-decoration: underline; }
+    .cloud-locked-help { margin-top: 10px; }
+
     .recommendation {
       padding: 18px;
       border: 1px solid #bcd6bc;
@@ -905,6 +917,66 @@
       box-shadow: 0 30px 90px rgba(0,0,0,.25);
     }
     dialog::backdrop { background: rgba(10, 23, 13, .58); backdrop-filter: blur(3px); }
+
+    .search-kbd {
+      font: inherit;
+      font-size: .72rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: color-mix(in srgb, var(--text) 8%, transparent);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 1px 6px;
+      margin-left: 2px;
+    }
+    #global-search-dialog {
+      width: min(600px, calc(100% - 24px));
+      top: 14%;
+      align-self: start;
+      margin-top: 14vh;
+    }
+    #global-search-dialog .dialog-body { padding: 0; }
+    .search-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--line); }
+    .search-input-wrap span { opacity: .6; font-size: 1.05rem; }
+    #global-search-input {
+      flex: 1;
+      border: 0;
+      outline: none;
+      background: transparent;
+      font-size: 1rem;
+      color: var(--text);
+      font-family: inherit;
+    }
+    .search-results { max-height: 60vh; overflow: auto; padding: 8px; }
+    .search-group-label { padding: 10px 12px 4px; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 700; }
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .search-result-item:hover, .search-result-item.active { background: var(--surface-soft); }
+    .search-result-icon {
+      width: 34px; height: 34px; flex: none;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 9px;
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size: 1rem;
+    }
+    .search-result-text { flex: 1; min-width: 0; }
+    .search-result-title { font-weight: 600; font-size: .93rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .search-result-subtitle { font-size: .8rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .search-result-value { flex: none; font-size: .85rem; font-weight: 600; color: var(--muted); }
+    .search-empty { padding: 32px 20px; text-align: center; color: var(--muted); font-size: .9rem; }
+    .search-hint { padding: 10px 20px; border-top: 1px solid var(--line); font-size: .76rem; color: var(--muted); display: flex; gap: 14px; }
+    .search-hint span { display: inline-flex; align-items: center; gap: 4px; }
     .dialog-head {
       position: sticky;
       top: 0;
@@ -1917,6 +1989,9 @@
           </div>
         </div>
         <div class="portal-actions">
+          <button class="btn btn-soft global-search-button" id="global-search-button" type="button" aria-label="Buscar (Ctrl+K)">
+            <span aria-hidden="true">⌕</span> Buscar <kbd class="search-kbd" aria-hidden="true">Ctrl K</kbd>
+          </button>
           <button class="btn btn-soft theme-button" id="theme-toggle-button" type="button" aria-label="Alterar tema">Tema: automático</button>
           <button class="sync-pill" id="sync-status-button" type="button">Somente neste aparelho</button>
           <button class="btn btn-primary install-button" id="install-app-button">Instalar aplicativo</button>
@@ -2451,6 +2526,23 @@
     </form>
   </dialog>
 
+  <dialog id="global-search-dialog" aria-labelledby="global-search-title">
+    <div class="dialog-body">
+      <h2 id="global-search-title" class="sr-only" style="position:absolute;left:-9999px;">Busca rápida</h2>
+      <div class="search-input-wrap">
+        <span aria-hidden="true">⌕</span>
+        <input id="global-search-input" type="text" placeholder="Buscar transações, cartões, metas..." autocomplete="off" aria-label="Buscar transações, cartões e metas" role="combobox" aria-expanded="true" aria-controls="global-search-results" aria-autocomplete="list">
+        <button class="dialog-close" type="button" id="global-search-close" aria-label="Fechar">×</button>
+      </div>
+      <div class="search-results" id="global-search-results" role="listbox"></div>
+      <div class="search-hint">
+        <span><kbd class="search-kbd">↑↓</kbd> navegar</span>
+        <span><kbd class="search-kbd">Enter</kbd> abrir</span>
+        <span><kbd class="search-kbd">Esc</kbd> fechar</span>
+      </div>
+    </div>
+  </dialog>
+
   <dialog id="invoice-statement-dialog" aria-labelledby="invoice-statement-title">
     <form id="invoice-statement-form">
       <div class="dialog-head">
@@ -2908,6 +3000,7 @@
       let cloudSyncTimer = null;
       let cloudSyncing = false;
       let cloudPollTimer = null;
+      let cloudDialogMode = "signin"; // "signin" | "forgot" | "recovery"
       let panoramaPeriod = "month";
       let transactionSearchQuery = "";
       let paymentSearchQuery = "";
@@ -3474,19 +3567,48 @@
           </div>`;
       }
 
-      function cloudAuthHtml() {
+      function passwordFieldHtml(name, autocomplete, minlength) {
+        return `<div class="password-field"><input name="${name}" type="password" minlength="${minlength}" required autocomplete="${autocomplete}"><button class="password-toggle" type="button" data-toggle-password aria-label="Mostrar senha">Mostrar</button></div>`;
+      }
+
+      function cloudForgotHtml() {
         return `
-          <div class="privacy-lock"><strong>Criptografia de ponta a ponta:</strong> escolha uma senha exclusiva. Ela cifra os dados antes do envio e nunca é salva no banco. Para abrir em outro aparelho, use exatamente a mesma senha.</div>
+          <div class="privacy-lock"><strong>Redefinir senha de login:</strong> enviaremos um link por e-mail para você escolher uma nova senha de acesso. Isso não altera nem recupera a senha de criptografia.</div>
+          <form id="cloud-forgot-form" class="form-grid" style="margin-top:14px">
+            <div class="field full"><label>E-mail da conta</label><input name="email" type="email" required autocomplete="email"></div>
+            <div class="toolbar-actions field full">
+              <button class="btn btn-primary" type="submit">Enviar link de redefinição</button>
+              <button class="btn btn-soft" type="button" id="cloud-forgot-cancel">Voltar para o login</button>
+            </div>
+          </form>`;
+      }
+
+      function cloudRecoveryHtml() {
+        return `
+          <div class="privacy-lock"><strong>Escolha uma nova senha de login.</strong> Você chegou aqui pelo link enviado por e-mail.</div>
+          <form id="cloud-recovery-form" class="form-grid" style="margin-top:14px">
+            <div class="field full"><label>Nova senha de login</label>${passwordFieldHtml("password", "new-password", 6)}</div>
+            <div class="field full"><button class="btn btn-primary" type="submit">Salvar nova senha</button></div>
+          </form>`;
+      }
+
+      function cloudAuthHtml() {
+        if (cloudDialogMode === "forgot") return cloudForgotHtml();
+        return `
+          <div class="privacy-lock"><strong>Criptografia de ponta a ponta:</strong> escolha uma senha exclusiva. Ela cifra os dados antes do envio e nunca é salva no banco. Para abrir em outro aparelho, use exatamente a mesma senha. <u>Guarde-a em local seguro: se for esquecida, os dados salvos na nuvem não podem ser recuperados.</u></div>
           <form id="cloud-auth-form" class="form-grid" style="margin-top:14px">
             <div class="field full"><label>E-mail</label><input name="email" type="email" required autocomplete="email"></div>
-            <div class="field full"><label>Senha do login</label><input name="password" type="password" minlength="6" required autocomplete="current-password"></div>
-            <div class="field full"><label>Senha de criptografia</label><input name="passphrase" type="password" minlength="8" required autocomplete="off"><small>Não use a mesma senha do login. Sem ela, nem o banco consegue ler seus dados.</small></div>
+            <div class="field full"><label>Senha de login</label>${passwordFieldHtml("password", "current-password", 6)}</div>
+            <div class="field full"><label>Senha de criptografia</label>${passwordFieldHtml("passphrase", "off", 8)}<small>Não use a mesma senha do login. Sem ela, nem o banco consegue ler seus dados.</small></div>
             <div class="toolbar-actions field full">
               <button class="btn btn-primary" type="submit" data-auth-action="signin">Entrar</button>
               <button class="btn btn-soft" type="submit" data-auth-action="signup">Criar conta</button>
             </div>
           </form>
-          <button class="btn btn-soft btn-small" id="cloud-config-reset" type="button" style="margin-top:10px">Alterar endereço do banco</button>`;
+          <div class="cloud-link-row">
+            <button class="cloud-link-button" id="cloud-forgot-open" type="button">Esqueci minha senha de login</button>
+            <button class="btn btn-soft btn-small" id="cloud-config-reset" type="button">Alterar endereço do banco</button>
+          </div>`;
       }
 
       function cloudUnlockedHtml() {
@@ -3494,9 +3616,13 @@
           return `
             <div class="privacy-lock">Sua sessão de login está ativa. Digite a senha de criptografia para abrir e sincronizar os dados.</div>
             <form id="cloud-unlock-form" class="form-grid" style="margin-top:14px">
-              <div class="field full"><label>Senha de criptografia</label><input name="passphrase" type="password" minlength="8" required autocomplete="off"></div>
+              <div class="field full"><label>Senha de criptografia</label>${passwordFieldHtml("passphrase", "off", 8)}</div>
               <div class="field full"><button class="btn btn-primary" type="submit">Desbloquear</button></div>
-            </form>`;
+            </form>
+            <div class="cloud-locked-help">
+              <p><small>Esqueceu a senha de criptografia? Ela não fica salva em nenhum servidor, então não é possível recuperá-la — os dados já enviados para a nuvem ficam ilegíveis sem ela. Você pode sair e criar uma nova senha de criptografia; seus dados <strong>locais neste aparelho</strong> continuam intactos.</small></p>
+              <button class="btn btn-danger btn-small" id="cloud-logout-button" type="button">Sair e trocar de conta ou senha</button>
+            </div>`;
         }
         return `
           <div class="cloud-status">
@@ -3516,11 +3642,16 @@
         const target = $("#cloud-dialog-content");
         if (!target) return;
         const config = getCloudConfig();
+        if (cloudDialogMode === "recovery") {
+          target.innerHTML = cloudRecoveryHtml();
+          return;
+        }
         target.innerHTML = !config.url || !config.anonKey ? cloudSetupHtml() : !cloudUser ? cloudAuthHtml() : cloudUnlockedHtml();
       }
 
       function openCloudDialog() {
         lastModalOpener = document.activeElement;
+        if (cloudDialogMode !== "recovery") cloudDialogMode = "signin";
         renderCloudDialog();
         $("#cloud-dialog").showModal();
       }
@@ -3602,7 +3733,30 @@
         clearInterval(cloudPollTimer);
         cloudUser = null;
         cloudPassphrase = "";
+        cloudDialogMode = "signin";
         setCloudStatus("Somente neste aparelho");
+        renderCloudDialog();
+        renderCloudPanel();
+      }
+
+      async function sendPasswordReset(form) {
+        if (!supabaseClient) return;
+        const email = String(new FormData(form).get("email") || "").trim();
+        if (!email) return;
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email, { redirectTo: window.location.href.split("#")[0] });
+        if (error) return toast(`Não foi possível enviar o link: ${error.message}`, "error");
+        toast("Link de redefinição enviado. Confira seu e-mail (e o spam).");
+        cloudDialogMode = "signin";
+        renderCloudDialog();
+      }
+
+      async function completePasswordRecovery(form) {
+        if (!supabaseClient) return;
+        const password = String(new FormData(form).get("password") || "");
+        const { error } = await supabaseClient.auth.updateUser({ password });
+        if (error) return toast(`Não foi possível salvar a nova senha: ${error.message}`, "error");
+        cloudDialogMode = "signin";
+        toast("Senha de login atualizada. Você já está conectado.");
         renderCloudDialog();
         renderCloudPanel();
       }
@@ -3619,9 +3773,15 @@
           });
           const { data } = await supabaseClient.auth.getSession();
           cloudUser = data.session?.user || null;
-          supabaseClient.auth.onAuthStateChange((_event, session) => {
+          supabaseClient.auth.onAuthStateChange((event, session) => {
             cloudUser = session?.user || null;
             if (!cloudUser) cloudPassphrase = "";
+            if (event === "PASSWORD_RECOVERY") {
+              cloudDialogMode = "recovery";
+              lastModalOpener = document.activeElement;
+              renderCloudDialog();
+              if (!$("#cloud-dialog").open) $("#cloud-dialog").showModal();
+            }
             setTimeout(() => renderCloudPanel(), 0);
           });
           renderCloudPanel();
@@ -5857,6 +6017,120 @@
         }
       }
 
+      let searchActiveIndex = -1;
+      let searchResultsCache = [];
+
+      function globalSearchIndex() {
+        const items = [];
+        for (const t of state.transactions) {
+          items.push({
+            group: "transaction",
+            groupLabel: "Lançamentos",
+            icon: t.type === "income" ? "↑" : "↓",
+            id: t.id,
+            title: t.description || "(sem descrição)",
+            subtitle: `${t.category || "Sem categoria"} · ${t.date ? dateBr(t.date) : ""}`,
+            value: money(t.value),
+            haystack: normalize(`${t.description} ${t.category}`)
+          });
+        }
+        for (const c of state.cards) {
+          items.push({
+            group: "card",
+            groupLabel: "Cartões",
+            icon: "▰",
+            id: c.id,
+            title: c.name,
+            subtitle: `Fecha dia ${c.closingDay} · vence dia ${c.dueDay}`,
+            value: c.limit ? money(c.limit) : "",
+            haystack: normalize(c.name)
+          });
+        }
+        for (const g of state.goals) {
+          items.push({
+            group: "goal",
+            groupLabel: "Metas",
+            icon: "◎",
+            id: g.id,
+            title: g.name,
+            subtitle: g.deadline ? `Meta para ${monthLabel(g.deadline)}` : "Sem prazo definido",
+            value: money(g.target),
+            haystack: normalize(g.name)
+          });
+        }
+        return items;
+      }
+
+      function openGlobalSearchResult(item) {
+        $("#global-search-dialog").close();
+        if (item.group === "transaction") {
+          setView("budget");
+          openModal("transaction", item.id);
+        } else if (item.group === "card") {
+          setView("cards");
+          openModal("card", item.id);
+        } else if (item.group === "goal") {
+          setView("goals");
+          openModal("goal", item.id);
+        }
+      }
+
+      function renderGlobalSearchResults(query) {
+        const container = $("#global-search-results");
+        const normalizedQuery = normalize(query);
+        const index = globalSearchIndex();
+        const filtered = normalizedQuery
+          ? index.filter(item => item.haystack.includes(normalizedQuery))
+          : index.slice(0, 40);
+        const limited = filtered.slice(0, 40);
+        searchResultsCache = limited;
+        searchActiveIndex = limited.length ? 0 : -1;
+
+        if (!limited.length) {
+          container.innerHTML = `<div class="search-empty">${normalizedQuery ? `Nada encontrado para "${esc(query)}".` : "Digite para buscar em lançamentos, cartões e metas."}</div>`;
+          return;
+        }
+
+        let html = "";
+        let lastGroup = "";
+        limited.forEach((item, i) => {
+          if (item.group !== lastGroup) {
+            html += `<div class="search-group-label">${esc(item.groupLabel)}</div>`;
+            lastGroup = item.group;
+          }
+          html += `<button type="button" class="search-result-item${i === searchActiveIndex ? " active" : ""}" role="option" aria-selected="${i === searchActiveIndex}" data-search-index="${i}">
+            <span class="search-result-icon" aria-hidden="true">${item.icon}</span>
+            <span class="search-result-text">
+              <span class="search-result-title">${esc(item.title)}</span>
+              <span class="search-result-subtitle">${esc(item.subtitle)}</span>
+            </span>
+            <span class="search-result-value">${esc(item.value)}</span>
+          </button>`;
+        });
+        container.innerHTML = html;
+      }
+
+      function moveSearchActive(delta) {
+        if (!searchResultsCache.length) return;
+        searchActiveIndex = (searchActiveIndex + delta + searchResultsCache.length) % searchResultsCache.length;
+        $$(".search-result-item", $("#global-search-results")).forEach((el, i) => {
+          const active = i === searchActiveIndex;
+          el.classList.toggle("active", active);
+          el.setAttribute("aria-selected", String(active));
+          if (active) el.scrollIntoView({ block: "nearest" });
+        });
+      }
+
+      function openGlobalSearch() {
+        lastModalOpener = document.activeElement;
+        const input = $("#global-search-input");
+        input.value = "";
+        renderGlobalSearchResults("");
+        const dialog = $("#global-search-dialog");
+        if (!dialog.open) dialog.showModal();
+        input.focus();
+      }
+
       function openModal(type, id = "", transactionType = "") {
         const config = ENTITY_MAP[type];
         if (!config) return;
@@ -7103,11 +7377,30 @@
         }
         if (event.target.closest("#cloud-history-button")) loadCloudHistory();
         if (event.target.closest("#cloud-logout-button")) logoutCloud();
+        if (event.target.closest("#cloud-forgot-open")) {
+          cloudDialogMode = "forgot";
+          renderCloudDialog();
+        }
+        if (event.target.closest("#cloud-forgot-cancel")) {
+          cloudDialogMode = "signin";
+          renderCloudDialog();
+        }
+        const toggle = event.target.closest("[data-toggle-password]");
+        if (toggle) {
+          const input = toggle.previousElementSibling;
+          if (input) {
+            const show = input.type === "password";
+            input.type = show ? "text" : "password";
+            toggle.textContent = show ? "Ocultar" : "Mostrar";
+            toggle.setAttribute("aria-label", show ? "Ocultar senha" : "Mostrar senha");
+          }
+        }
         if (event.target.closest("#cloud-config-reset") && confirm("Remover a configuração deste aparelho? Seus dados locais e o banco não serão apagados.")) {
           localStorage.removeItem(CLOUD_CONFIG_KEY);
           supabaseClient = null;
           cloudUser = null;
           cloudPassphrase = "";
+          cloudDialogMode = "signin";
           renderCloudDialog();
           renderCloudPanel();
         }
@@ -7125,6 +7418,14 @@
         if (event.target.id === "cloud-unlock-form") {
           event.preventDefault();
           unlockCloud(event.target);
+        }
+        if (event.target.id === "cloud-forgot-form") {
+          event.preventDefault();
+          sendPasswordReset(event.target);
+        }
+        if (event.target.id === "cloud-recovery-form") {
+          event.preventDefault();
+          completePasswordRecovery(event.target);
         }
       });
 
@@ -7258,6 +7559,33 @@
       $("#review-close").addEventListener("click", () => $("#review-dialog").close());
       $("#review-cancel").addEventListener("click", () => $("#review-dialog").close());
       $("#cloud-close").addEventListener("click", () => $("#cloud-dialog").close());
+      $("#global-search-button").addEventListener("click", openGlobalSearch);
+      $("#global-search-close").addEventListener("click", () => $("#global-search-dialog").close());
+      $("#global-search-input").addEventListener("input", event => renderGlobalSearchResults(event.target.value));
+      $("#global-search-input").addEventListener("keydown", event => {
+        if (event.key === "ArrowDown") { event.preventDefault(); moveSearchActive(1); }
+        else if (event.key === "ArrowUp") { event.preventDefault(); moveSearchActive(-1); }
+        else if (event.key === "Enter") {
+          event.preventDefault();
+          const item = searchResultsCache[searchActiveIndex];
+          if (item) openGlobalSearchResult(item);
+        }
+      });
+      $("#global-search-results").addEventListener("click", event => {
+        const button = event.target.closest("[data-search-index]");
+        if (!button) return;
+        const item = searchResultsCache[Number(button.dataset.searchIndex)];
+        if (item) openGlobalSearchResult(item);
+      });
+      document.addEventListener("keydown", event => {
+        const key = event.key.toLowerCase();
+        if ((event.metaKey || event.ctrlKey) && key === "k") {
+          event.preventDefault();
+          const dialog = $("#global-search-dialog");
+          if (dialog.open) dialog.close();
+          else openGlobalSearch();
+        }
+      });
       $$("dialog").forEach(dialog => {
         dialog.addEventListener("close", () => {
           if (lastModalOpener instanceof HTMLElement && document.contains(lastModalOpener)) lastModalOpener.focus();
